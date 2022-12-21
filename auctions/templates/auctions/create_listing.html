@@ -8,24 +8,24 @@
     {% csrf_token %}
     <div class="form-group">
         <label for="title">Title</label>
-        <input type="text" class="form-control form-control-sm" id="title" placeholder="Title" name="title">
+        <input type="text" class="form-control form-control-sm" id="title" placeholder="Title" name="title" required>
     </div>
     <div class="form-group">
         <label for="description">Description</label>
-        <input type="text" class="form-control form-control-sm" id="description" placeholder="Description" name="description">
+        <input type="text" class="form-control form-control-sm" id="description" placeholder="Description" name="description" required>
     </div>
     <div class="form-group">
         <label for="image_url">Image URL</label>
-        <input type="text" class="form-control form-control-sm" id="image_url" placeholder="Image URL" name="image_url">
+        <input type="text" class="form-control form-control-sm" id="image_url" placeholder="Image URL" name="image_url" required>
     </div>
     <div class="form-group">
         <label for="bid">Starting BID</label>
-        <input type="number" class="form-control form-control-sm" id="bid" placeholder="Price" name="bid">
+        <input type="number" class="form-control form-control-sm" id="bid" placeholder="Price" name="bid" required min="0">
     </div>
     <div class="form-group">
         <label for="category">Category</label>
-        <select class="custom-select" id="category" name="category">
-            <option selected>Category</option>
+        <select class="custom-select" id="category" name="category" required>
+            <option value="No Category" selected>Category</option>
             {% for category in categories %}
             <option value="{{category}}">{{category}}</option>
             {% endfor %}

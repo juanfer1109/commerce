@@ -31,6 +31,7 @@ def index(request):
     })
 
 def detailListing(request, pk):
+    actUser = request.user
     message_error = None
     message_ok = None
     winner = False
@@ -90,6 +91,7 @@ def detailListing(request, pk):
                         )
                         bidNew.save()
                         message_ok = "New BID placed"
+                        listing.watch.add(actUser)
                         cant_bids += 1
 
         except:
@@ -196,6 +198,9 @@ def createListing(request):
         image_url = request.POST["image_url"]
         starting_bid = request.POST["bid"]
         category = request.POST["category"]
+        if category == "Category":
+            category = None
+
         catInfo = Category.objects.get(catName=category)
         newListing = Listing(
             title=title,
