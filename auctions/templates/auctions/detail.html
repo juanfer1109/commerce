@@ -1,0 +1,95 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+{% if not element.is_active %}
+
+{% if winner %}
+<div class="alert alert-success" role="alert">
+    You won this listing for ${{max_bid}}
+</div>
+{% else %}
+<div class="alert alert-warning" role="alert">
+    This listing is closed
+</div>
+
+{% endif %}
+
+{% endif %}
+
+
+{% if message_error %}
+<div class="alert alert-danger" role="alert">
+    {{ message_error }}
+</div>
+{% endif %}
+
+{% if message_ok %}
+<div class="alert alert-info" role="alert">
+    {{ message_ok }}
+</div>
+{% endif %}
+
+
+{% if user.is_authenticated %}
+    {% if isWatch %}
+        <form action="{% url 'remove' pk=element.id %}" method="POST"> {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Remove from Watch List</button>
+        </form>
+        {% else %}
+        <form action="{% url 'add' pk=element.id %}" method="POST"> {% csrf_token %}
+            <button type="submit" class="btn btn-info">Add to Watch List</button>
+        </form>
+    {% endif %}
+{% endif %}
+
+<h5 class="text-dark text-decoration-non">{{element.title}}</h5>
+<img src="{{element.image_url}}" alt="{{element.title}}" height="300px">
+<p class="card-text">{{element.description}}</p>
+<p>Omner: {{element.user}}</p>
+<p>Starting BID: ${{element.starting_bid}} ({{cant_bids}} BIDs)</p>
+{% if user.is_authenticated %}
+    <form action="{% url 'detail' pk=element.id%}" method="POST"> {% csrf_token %}
+        <label for="new_bid">Do an offer: </label>
+        <input type="number" name="new_bid" id="new_bid" min="0">
+        <input type="submit" value="Do it">
+    </form>
+    {% if owner %}
+        <form action="{% url 'detail' pk=element.id%}" method="POST"> {% csrf_token %}
+            <input type="checkbox" name="is_active" value="True">
+            <label for="is_active">Close listing</label>
+            <input type="submit" value="Close">
+        </form>
+    {% endif %}
+{% endif %}
+
+<p>Category: {{element.category}}</p>
+
+<div>
+    <h5>Comments:</h5>
+    {% if user.is_authenticated %}
+        <form action="{% url 'addComment' pk=element.id %}" method="POST"> {% csrf_token %}
+            <input type="text" name="new_comment" id="new_comment" placeholder="Add a comment">
+            <input type="submit" value="Add">
+        </form>
+    {% endif %}
+    <br>
+
+    <div class="list-group">
+        {% for comment in comments %}
+        <div class="list-group-item">
+            <div class="d-flex w-100 justify-content-between">
+                <p class="mb-1">{{comment.comment}}</p>
+                <small>By <strong>{{comment.author}}</strong></small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+          
+        
+      
+
+
+</div>
+
+{% endblock %}
